@@ -10,7 +10,10 @@ public class Pila<T> {
 
     // Constructor que recibe la capacidad
     public Pila(int capacidad) {
-        pila = (T[]) new Object[capacidad];
+        if (capacidad < 0) {
+            throw new IllegalArgumentException("La capacidad no puede ser negativa");
+        }
+        pila = (T[]) new Object[Math.max(capacidad, 1)];
         tope = -1;
     }
 
@@ -34,7 +37,7 @@ public class Pila<T> {
         }
     }
 
-    public T cima() {          // peek necesario para ordenar
+    public T cima() {
         if (vacia()) {
             return null;
         }
@@ -88,7 +91,7 @@ public class Pila<T> {
         return pila.vacia();
     }
 
-    // 5. Ordenar un vector de enteros usando pilas (menor → mayor, el menor queda en la cima)
+    // 5. Ordenar un vector de enteros usando pilas
     public Pila<Integer> ordenar(int[] vector) {
         Pila<Integer> entrada = new Pila<>(vector.length);
         Pila<Integer> auxiliar = new Pila<>(vector.length);
@@ -102,8 +105,8 @@ public class Pila<T> {
         while (!entrada.vacia()) {
             Integer temp = entrada.pop();
 
-            // Mover de auxiliar a entrada mientras el tope de auxiliar sea mayor
-            while (!auxiliar.vacia() && auxiliar.cima() > temp) {
+            // Mover de auxiliar a entrada mientras el tope de auxiliar sea menor
+            while (!auxiliar.vacia() && auxiliar.cima() < temp) {
                 entrada.push(auxiliar.pop());
             }
             auxiliar.push(temp);
